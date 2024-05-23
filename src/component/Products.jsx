@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Products = ({ addToCart }) => {
     const [productData, setProductData] = useState([]);
@@ -30,25 +31,23 @@ const Products = ({ addToCart }) => {
                 </div>
             ) : (
                 productData.map(product => (
-                    <div key={product.id} className="col">
-                        <div className="card mx-auto text-center border-0 my-3"
-                            style={{ width: '15rem', minHeight: '100%' }}>
-                            <img src={product.images[0]} className="card-img-top" alt="..."/>
-                            <div className="card-body d-flex flex-column">
-                                <h5 className="card-title">{product.title}</h5>
-                                <p className="card-text">{product.description.slice(0, 40)}</p>
-                                <h5 className="card-title">Price: Ksh. {product.price}</h5>
-                                <div className="mt-auto">
-                                    <button
-                                        className="btn btn-warning rounded-pill w-100"
-                                        onClick={() => addToCart(product)}
-                                        >
-                                            Add to Cart
-                                        </button>
+                    <Link
+                        className="col text-decoration-none"
+                        key={product.id}
+                        to={{ pathname: `/${product.id}/product`, state: {product: product }}}
+                        style={{ marginTop: '25px' }}
+                    >
+                            <div className="card mx-auto text-center border-0 mt-3"
+                                style={{ width: '15rem', minHeight: '100%' }}>
+                                <img src={product.thumbnail} className="card-img-top mt-3"/>
+                                <div className="card-body d-flex flex-column">
+                                    <h5 className="card-title">{product.title}</h5>
+                                    <p className="card-text">{product.description.slice(0, 40)}</p>
+                                    <h5 className="card-title">Price: $ {product.price}</h5>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    </Link>
+
                 )))}
 
         </div>

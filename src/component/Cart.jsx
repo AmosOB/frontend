@@ -25,17 +25,19 @@ const Cart = () => {
     }
 
     const removeProduct = (id) => {
-        // const updatedCart = cartItems.filter(item => item.id !== id);
-        // setCartItems(updatedCart);
-        // localStorage.setItem('cart', JSON.stringify(updatedCart));
+        const updatedCart = cartItems.filter(item => item.id !== id);
+        setCartItems(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
     }
   return (
 
-    <div className='container'>
+    <div
+        className='container'
+        style={{ marginTop: '20vh' }}>
         <Navbar cart = { cartItems }/>
         <div className='row justify-content-center'>
-            <div className='col-md-8'>
-                <div style={{marginTop: '6rem'}}>
+            <div className='col-md-8' >
+                <div>
                 <ul className="list-group list-group-flush">
                         <div className='row d-flex'>
                             <div className="col-md-6">
@@ -54,7 +56,7 @@ const Cart = () => {
                         </div>
 
                     {cartEmpty ? (
-                        <Link className='btn btn-warning align-middle' to={`/`}>
+                        <Link className='btn btn-warning align-items-center' to={`/`}>
                                 Continue Shopping
                         </Link>
 
@@ -82,7 +84,7 @@ const Cart = () => {
 
                                     <div className="col-md-6">
                                             <DeleteIcon
-                                            onClick= {removeProduct(cartItem.id)}
+                                            onClick= {() => removeProduct(cartItem.id)}
                                             className='mt-3'
                                             color='warning'
                                             sx={{ fontSize: 20 }}/>

@@ -40,16 +40,18 @@ const Navbar = ({ cart }) => {
   return (
         <nav className="navbar navbar-expand-lg navbar-light bg-warning fixed-top">
             <div className="container-fluid">
-                <div className="">
+                <div className="float-start">
                     <a className="navbar-brand fw-bold" href="#">ZenMatt</a>
                 </div>
-                <Link to={`/cart`}>
-                    <IconButton aria-label="cart">
-                        <StyledBadge badgeContent={cart.length} color="secondary">
-                            <ShoppingCartIcon />
-                        </StyledBadge>
-                    </IconButton>
-                </Link>
+                <div className=''>
+                    <Link to={`/cart`}>
+                        <IconButton aria-label="cart">
+                            <StyledBadge badgeContent={cart.length} color="secondary">
+                                <ShoppingCartIcon />
+                            </StyledBadge>
+                        </IconButton>
+                    </Link>
+                </div>
                 <div>
                     <button
                         className="navbar-toggler"
