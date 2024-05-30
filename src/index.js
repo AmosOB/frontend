@@ -5,6 +5,7 @@ import App from './App';
 import axios from 'axios';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { CartProvider } from './component/CartContext';
 
 
 
@@ -13,7 +14,9 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
+    <CartProvider>
         <App />
+    </CartProvider>
   </BrowserRouter>
 );
 

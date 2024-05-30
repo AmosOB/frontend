@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const Products = ({ addToCart }) => {
+const Products = () => {
     const [productData, setProductData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -20,6 +20,10 @@ const Products = ({ addToCart }) => {
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    const calculateOriginalPrice = (discountedPrice, discountPercentage) => {
+        return (discountedPrice / (1 - discountPercentage / 100)).toFixed(2);
+      };
 
   return (
         <div className="row content-justify-center" style={{ marginTop: '56px' }}>
@@ -43,7 +47,11 @@ const Products = ({ addToCart }) => {
                                 <div className="card-body d-flex flex-column">
                                     <h5 className="card-title">{product.title}</h5>
                                     <p className="card-text">{product.description.slice(0, 40)}</p>
-                                    <h5 className="card-title">Price: $ {product.price}</h5>
+                                    <h5 className="card-title">$ {product.price}</h5>
+                                    <p
+                                        className="fw-light text-decoration-line-through">
+                                        $ {calculateOriginalPrice(product.price, product.discountPercentage)}
+                                    </p>
                                 </div>
                             </div>
                     </Link>

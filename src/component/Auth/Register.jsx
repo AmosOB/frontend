@@ -5,7 +5,7 @@ import Navbar from '../Navbar';
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
-const Register = () => {
+const Register = ({ cart }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',

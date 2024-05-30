@@ -3,22 +3,42 @@ import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { isAuthenticated } from './Auth/PrivateRoutes';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useCart } from './CartContext';
+import { Dropdown } from 'react-bootstrap';
 
 
-const Navbar = ({ cart }) => {
-    const isLoggedIn = isAuthenticated();
+const Navbar = () => {
     const [loggedIn, setLoggedIn] = useState(true);
+    const { cart } = useCart();
+    const [user, setUser] = useState(null);
+
+    const fetchUser = async () => {
+        try {
+            const response = await axios.get(`/api/user`);
+            setUser(response.data);
+
+         } catch (error) {
+             console.log(error);
+         };
+    }
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
     const handleLogout = () => {
         axios.post(`/api/logout/`)
         .then((res) => {
             localStorage.removeItem('token');
+            setLoggedIn(false);
         })
         .catch((err) =>{
-            console.log(err);
+            console.log('Error fetching user data:', err);
         })
     };
 
@@ -40,9 +60,9 @@ const Navbar = ({ cart }) => {
   return (
         <nav className="navbar navbar-expand-lg navbar-light bg-warning fixed-top">
             <div className="container-fluid">
-                <div className="float-start">
-                    <a className="navbar-brand fw-bold" href="#">ZenMatt</a>
-                </div>
+                <Link to={`/`} className="float-start text-decoration-none">
+                    <div className="navbar-brand fs-3 fw-bold">Shoppify</div>
+                </Link>
                 <div className=''>
                     <Link to={`/cart`}>
                         <IconButton aria-label="cart">
@@ -67,22 +87,35 @@ const Navbar = ({ cart }) => {
                             {loggedIn ? (
                                 <>
                                     <li className="nav-item">
-                                        <a className="nav-link active">
-                                            <h5
-                                                className='navbar-brand text-muted'
-                                                >Account
-                                            </h5>
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
+                                        <div className="nav-link active">
+                                            {user ? (
+                                                <Dropdown>
+                                                    <Dropdown.Toggle
+                                                        style={{ cursor: "pointer" }}
+                                                        as="div"
+                                                        variant="success"
+                                                        id="dropdown-basic">
+                                                        {user.name}
+                                                    </Dropdown.Toggle>
 
-                                        <a className="nav-link active">
-                                            <button
-                                                className='btn btn-danger'
-                                                onClick={() => handleLogout()}
-                                                >Logout
-                                            </button>
-                                        </a>
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item as={Link} to={`/${user.id}`}>
+                                                                <AccountCircleIcon/>  Profile
+                                                        </Dropdown.Item>
+                                                        <Dropdown.Item href="#/action-2">
+                                                            <SettingsIcon/>  Settings
+                                                        </Dropdown.Item>
+                                                        <Dropdown.Item
+                                                            onClick={() => handleLogout()}> <LogoutIcon/>  Logout
+                                                        </Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            ):(
+                                                <div className="spinner-grow" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </li>
                                 </>
                             ) : (

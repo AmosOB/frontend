@@ -9,14 +9,47 @@ const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [cartEmpty, setCartEmpty] = useState(false);
 
+    // useEffect(() => {
+    //     const storedCart = JSON.parse(localStorage.getItem('cart'));
+    //     if(storedCart){
+    //         setCartItems(storedCart);
+    //     } else {
+    //         setCartEmpty(true);
+    //     }
+    // }, []);
+
     useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem('cart'));
-        if(storedCart){
-            setCartItems(storedCart);
-        } else {
-            setCartEmpty(true);
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            const parsedCart = JSON.parse(storedCart).map(item => ({
+                ...item,
+                quantity: item.quantity || 1
+            }));
+            setCartItems(parsedCart);
         }
     }, []);
+
+    const incrementQuantity = (id) => {
+        const updatedCart = cartItems.map(cartItem => {
+            if (cartItem.id === id) {
+                return { ...cartItem, quantity: cartItem.quantity + 1 };
+            }
+            return cartItem;
+        });
+        setCartItems(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+    };
+
+    const decrementQuantity = (id) => {
+        const updatedCart = cartItems.map(cartItem => {
+            if (cartItem.id === id && cartItem.quantity > 1) {
+                return { ...cartItem, quantity: cartItem.quantity - 1 };
+            }
+            return cartItem;
+        });
+        setCartItems(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+    };
 
     const removeAll = () => {
         setCartItems([]);
@@ -25,20 +58,29 @@ const Cart = () => {
     }
 
     const removeProduct = (id) => {
-        const updatedCart = cartItems.filter(item => item.id !== id);
-        setCartItems(updatedCart);
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        try {
+            const updatedCart = cartItems.filter(item => item.id !== id);
+            setCartItems(updatedCart);
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+            if(updatedCart.length === 0){
+                setCartEmpty(true);
+            }
+        } catch (error) {
+            console.error("An error occurred while removing the product:", error);
+        }
     }
   return (
 
     <div
         className='container'
-        style={{ marginTop: '20vh' }}>
-        <Navbar cart = { cartItems }/>
+        style={{ backgroundColor: '#ffff', marginTop: '12vh' }}>
+        <Navbar/>
         <div className='row justify-content-center'>
             <div className='col-md-8' >
                 <div>
-                <ul className="list-group list-group-flush">
+                <ul className="list-group list-group-flush"
+                    style={{ marginTop: '12vh' }}>
                         <div className='row d-flex'>
                             <div className="col-md-6">
                                 <h5>
@@ -94,13 +136,15 @@ const Cart = () => {
                                         <div className='card-title d-flex float-end mt-3 mx-3'>
                                             <RemoveCircleIcon
                                                 sx={{ fontSize: 20 }}
-                                                color='warning'/>
+                                                color='warning'
+                                                onClick={() => decrementQuantity(cartItem.id) }/>
 
-                                            <h6 className='mx-3'>1</h6>
+                                            <h6 className='mx-3'>{cartItem.quantity}</h6>
 
                                             <AddCircleIcon
                                                 sx={{ fontSize: 20 }}
-                                                color='warning'/>
+                                                color='warning'
+                                                onClick={() => incrementQuantity(cartItem.id) }/>
                                         </div>
                                     </div>
                                 </div>

@@ -2,40 +2,38 @@ import { useEffect, useState } from 'react';
 import Navbar from './component/Navbar';
 import Products from './component/Products';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Item from './component/Item';
 import PrivateRoutes from './component/Auth/PrivateRoutes';
 import Login from './component/Auth/Login';
 import Register from './component/Auth/Register';
+import Profile from './component/Auth/Profile';
 import Cart from './component/Cart';
+import { useCart } from './component/CartContext';
+import { Alert } from 'bootstrap';
 
 function App() {
-    const [cart, setCart] = useState([]);
-    const [showAlert, setShowAlert] = useState(false);
+    const { showAlert, setShowAlert} = useCart();
 
-    useEffect(() => {
-        const storedCart = localStorage.getItem('cart');
-        if (storedCart) {
-          setCart(JSON.parse(storedCart));
-        }
-      }, []);
-
-      const addToCart = (product) => {
-        setCart((prevCart) => {
-          const updatedCart = [...prevCart, product];
-          localStorage.setItem('cart', JSON.stringify(updatedCart));
-          return updatedCart;
-        });
-        setShowAlert(true);
-        setTimeout(() => {
-            setShowAlert(false);
-        }, 3000);
-      };
 
   return (
         <div
             className='container-fluid'
             style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+                {/* {[
+        'primary',
+        'secondary',
+        'success',
+        'danger',
+        'warning',
+        'info',
+        'light',
+        'dark',
+      ].map((variant) => (
+        <Alert key={variant} variant={variant}>
+          This is a {variant} alert—check it out!
+        </Alert>
+      ))} */}
             {showAlert && (
                 <div
                     className="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3"
@@ -53,15 +51,15 @@ function App() {
                 </div>
             )}
 
-            <Navbar cart = {cart}/>
+            <Navbar/><Profile></Profile>
                 <Routes>
-                    <Route path='/' element = {<Products addToCart = {addToCart}/>}/>
+                    <Route path='/' element = {<Products/>}/>
                     <Route path='/login' element = {<Login />}/>
                     <Route path='/register' element = {<Register />}/>
+                    <Route path='/:id' element = {<Profile />}/>
                     <Route path='/' element = {<App />}/>
                     <Route path='/cart' element = {<Cart />}/>
-                    <Route path='/:id/product' element = {<Item cart={cart} addToCart = {addToCart}/>}/>
-                    {/* <Route path="/item/:itemId" element={<Item cart={cart} />} /> */}
+                    <Route path='/:id/product' element = {<Item/>}/>
                     <Route element = {<PrivateRoutes />}>
                     </Route>
                 </Routes>
