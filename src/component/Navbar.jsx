@@ -10,9 +10,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from './CartContext';
 import { Dropdown } from 'react-bootstrap';
+import SearchProducts from './SearchProducts';
 
 
-const Navbar = () => {
+const Navbar = ({ cartEmpty, setCartEmpty}) => {
     const [loggedIn, setLoggedIn] = useState(true);
     const { cart } = useCart();
     const [user, setUser] = useState(null);
@@ -21,7 +22,6 @@ const Navbar = () => {
         try {
             const response = await axios.get(`/api/user`);
             setUser(response.data);
-
          } catch (error) {
              console.log(error);
          };
@@ -63,10 +63,11 @@ const Navbar = () => {
                 <Link to={`/`} className="float-start text-decoration-none">
                     <div className="navbar-brand fs-3 fw-bold">Shoppify</div>
                 </Link>
+                <SearchProducts></SearchProducts>
                 <div className=''>
                     <Link to={`/cart`}>
                         <IconButton aria-label="cart">
-                            <StyledBadge badgeContent={cart.length} color="secondary">
+                            <StyledBadge badgeContent={cart.length} color="primary">
                                 <ShoppingCartIcon />
                             </StyledBadge>
                         </IconButton>
@@ -91,22 +92,24 @@ const Navbar = () => {
                                             {user ? (
                                                 <Dropdown>
                                                     <Dropdown.Toggle
+                                                        className='fw-bold'
                                                         style={{ cursor: "pointer" }}
                                                         as="div"
                                                         variant="success"
                                                         id="dropdown-basic">
-                                                        {user.name}
+                                                        {user.username}
                                                     </Dropdown.Toggle>
 
                                                     <Dropdown.Menu>
-                                                        <Dropdown.Item as={Link} to={`/${user.id}`}>
-                                                                <AccountCircleIcon/>  Profile
+                                                        <Dropdown.Item as={Link} to={{ pathname: `/${user.username}`, state: {user}}}>
+                                                                <AccountCircleIcon color='warning'/>  Profile
                                                         </Dropdown.Item>
                                                         <Dropdown.Item href="#/action-2">
-                                                            <SettingsIcon/>  Settings
+                                                            <SettingsIcon color='warning'/>  Settings
                                                         </Dropdown.Item>
                                                         <Dropdown.Item
-                                                            onClick={() => handleLogout()}> <LogoutIcon/>  Logout
+                                                            onClick={() => handleLogout()}>
+                                                            <LogoutIcon color='warning'/>  Logout
                                                         </Dropdown.Item>
                                                     </Dropdown.Menu>
                                                 </Dropdown>
@@ -124,14 +127,14 @@ const Navbar = () => {
                                         <Link
                                             className='nav-link active fw-bold'
                                             to={ `/register` }>
-                                            <h5 className='navbar-brand text-muted'>Register</h5>
+                                                <button className='btn btn-dark fw-bold'>Register</button>
                                         </Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link
                                             className='nav-link active fw-bold'
                                             to={ `/login` }>
-                                            <h5 className='navbar-brand text-muted'>Login</h5>
+                                                <button className='btn btn-dark fw-bold'>Login</button>
                                         </Link>
                                     </li>
                                 </>

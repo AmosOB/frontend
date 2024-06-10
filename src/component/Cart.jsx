@@ -64,7 +64,7 @@ const Cart = () => {
             localStorage.setItem('cart', JSON.stringify(updatedCart));
 
             if(updatedCart.length === 0){
-                setCartEmpty(true);
+                cartEmpty(true);
             }
         } catch (error) {
             console.error("An error occurred while removing the product:", error);
@@ -75,7 +75,7 @@ const Cart = () => {
     <div
         className='container'
         style={{ backgroundColor: '#ffff', marginTop: '12vh' }}>
-        <Navbar/>
+        <Navbar cartEmpty={cartEmpty} setCartEmpty={setCartEmpty}/>
         <div className='row justify-content-center'>
             <div className='col-md-8' >
                 <div>

@@ -5,9 +5,11 @@ import Navbar from '../Navbar';
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
-const Register = ({ cart }) => {
+const Register = () => {
+    const [error, setError] = useState({});
     const [formData, setFormData] = useState({
         name: '',
+        username: '',
         email: '',
         password: ''
     });
@@ -24,6 +26,10 @@ const Register = ({ cart }) => {
             navigate('/');
         })
         .catch((err) => {
+            if(err.response && err.response.status === 422) {
+                console.log(err.response.data.message, err.response.data.errors);
+                setError(err.response.data.errors);
+            }
             console.log(err);
         })
     };
@@ -43,16 +49,39 @@ const Register = ({ cart }) => {
                                         name="name"
                                         value={ formData.name }
                                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                        className="form-control bg-white"
+                                        className={`form-control bg-white ${error.name ? 'is-invalid' : ''}`}
                                         id="name"
                                         placeholder="name"
                                         autoComplete="name"
-                                        required/>
+                                        />
                                     <label
                                         htmlFor="floatingInput"
                                     >
                                         Name
                                     </label>
+                                    {error.name && (
+                                        <div className="text-danger">{error.name[0]}</div>
+                                     )}
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        value={ formData.username }
+                                        onChange={(e) => setFormData({...formData, username: e.target.value})}
+                                        className={`form-control bg-white ${error.username ? 'is-invalid' : ''}`}
+                                        id="username"
+                                        placeholder="username"
+                                        autoComplete="username"
+                                        />
+                                    <label
+                                        htmlFor="floatingInput"
+                                    >
+                                        Username
+                                    </label>
+                                    {error.username && (
+                                        <div className="text-danger">{error.username[0]}</div>
+                                     )}
                                 </div>
                                 <div className="form-floating mb-3">
                                     <input
@@ -60,16 +89,19 @@ const Register = ({ cart }) => {
                                         name="email"
                                         value={ formData.email }
                                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                        className="form-control bg-white"
+                                        className={`form-control bg-white ${error.email ? 'is-invalid' : ''}`}
                                         id="email"
                                         placeholder="email"
                                         autoComplete="email"
-                                        required/>
+                                        />
                                     <label
                                         htmlFor="floatingInput"
                                     >
                                         Email
                                     </label>
+                                    {error.email && (
+                                        <div className="text-danger">{error.email[0]}</div>
+                                     )}
                                 </div>
                                 <div className="form-floating mb-3">
                                     <input
@@ -77,16 +109,19 @@ const Register = ({ cart }) => {
                                         name="password"
                                         value={ formData.password }
                                         onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                        className="form-control bg-white"
+                                        className={`form-control bg-white ${error.password ? 'is-invalid' : ''}`}
                                         id="password"
                                         placeholder="password"
                                         autoComplete="password"
-                                        required/>
+                                        />
                                     <label
                                         htmlFor="floatingInput"
                                     >
                                         Password
                                     </label>
+                                    {error.password && (
+                                        <div className="text-danger">{error.password[0]}</div>
+                                     )}
                                 </div>
                                 <br />
                                 <div>

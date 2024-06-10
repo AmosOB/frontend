@@ -43,7 +43,7 @@ const Item = () => {
     return (
         <div>
             <Navbar/>
-                {loading ? (
+                { loading ? (
                     <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
                         <div className="spinner-border" role="status">
                             <span className="visually-hidden">Loading...</span>
@@ -53,17 +53,12 @@ const Item = () => {
                     <div
                         className='row justify-content-center align-items-center'
                         style={{ marginTop: '5rem'}}>
-                        <div className="col-md-8">
+                        <div className="col-md-10">
                             <div className="card mx-auto text-center border-0 mt-3"
                                 style={{ marginTop: '2rem' }}>
                                 <div className="row">
-                                    <div className='col mx-3' style={{ marginTop: '2rem' }}>
-                                    <ImagesCarousel product = { product }/>
-                                        <img
-                                            src={product.thumbnail}
-                                            className="card-img-top mt-3"
-                                            alt={product.title}
-                                        />
+                                    <div className='col-md-5 mx-3' style={{ marginTop: '2rem' }}>
+                                        <ImagesCarousel product = { product }/>
                                     </div>
                                     <div className='col' style={{ marginTop: '2rem' }}>
                                         <div className="card-body d-flex flex-column">

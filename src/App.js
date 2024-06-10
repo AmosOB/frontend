@@ -14,6 +14,10 @@ import { Alert } from 'bootstrap';
 
 function App() {
     const { showAlert, setShowAlert} = useCart();
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const loginState = () => setLoggedIn(true);
+    const logoutState = () => setLoggedIn(false);
 
 
   return (
@@ -51,16 +55,15 @@ function App() {
                 </div>
             )}
 
-            <Navbar/><Profile></Profile>
+            <Navbar logoutState= {logoutState} loggedIn= {loggedIn}/>
                 <Routes>
                     <Route path='/' element = {<Products/>}/>
-                    <Route path='/login' element = {<Login />}/>
+                    <Route path='/login' element = {<Login loginState ={loginState} />}/>
                     <Route path='/register' element = {<Register />}/>
-                    <Route path='/:id' element = {<Profile />}/>
-                    <Route path='/' element = {<App />}/>
                     <Route path='/cart' element = {<Cart />}/>
                     <Route path='/:id/product' element = {<Item/>}/>
                     <Route element = {<PrivateRoutes />}>
+                        <Route path='/:username' element = {<Profile />}/>
                     </Route>
                 </Routes>
         </div>

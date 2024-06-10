@@ -5,7 +5,8 @@ import Navbar from '../Navbar';
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
-const Login = ({ cart }) => {
+const Login = () => {
+    const [error, setError] = useState({});
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -24,7 +25,11 @@ const Login = ({ cart }) => {
 
         })
         .catch((err) => {
-            console.log(err);
+            if(err.response && err.response.status === 422) {
+                console.log(err.response.data.message, err.response.data.errors);
+                setError(err.response.data.errors)
+            }
+            console.log("Password does not match", err);
         })
     };
   return (
@@ -36,41 +41,47 @@ const Login = ({ cart }) => {
                         <div className="card-body">
                             <h5 className='mb-3'>Login</h5>
                             <form onSubmit={ handleSubmit }>
+                                        <div className="form-floating mb-3">
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                value={ formData.email }
+                                                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                                className={`form-control bg-white ${error.email ? 'is-invalid' : ''}`}
+                                                id="email"
+                                                placeholder="email"
+                                                autoComplete="email"
+                                                />
+                                            <label
+                                                htmlFor="floatingInput"
+                                            >
+                                                Email
+                                            </label>
+                                            {error.email && (
+                                                <div className="text-danger">{error.email[0]}</div>
+                                            )}
+                                        </div>
+                                        <div className="form-floating mb-3">
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                value={ formData.password }
+                                                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                                className={`form-control bg-white ${error.password ? 'is-invalid' : ''}`}
+                                                id="password"
+                                                placeholder="password"
+                                                autoComplete="password"
+                                                />
+                                            <label
+                                                htmlFor="floatingInput"
+                                            >
+                                                Password
+                                            </label>
+                                            {error.password && (
+                                                <div className="text-danger">{error.password[0]}</div>
+                                            )}
+                                        </div>
 
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={ formData.email }
-                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                        className="form-control bg-white"
-                                        id="email"
-                                        placeholder="email"
-                                        autoComplete="email"
-                                        required/>
-                                    <label
-                                        htmlFor="floatingInput"
-                                    >
-                                        Email
-                                    </label>
-                                </div>
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={ formData.password }
-                                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                        className="form-control bg-white"
-                                        id="password"
-                                        placeholder="password"
-                                        autoComplete="password"
-                                        required/>
-                                    <label
-                                        htmlFor="floatingInput"
-                                    >
-                                        Password
-                                    </label>
-                                </div>
                                 <br />
                                 <div>
                                         <h6>
