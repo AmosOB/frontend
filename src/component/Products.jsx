@@ -10,6 +10,7 @@ const Products = () => {
         try {
            const response = await axios.get(`https://dummyjson.com/products`);
            setProductData(response.data.products);
+        //    console.log(response.data.products);
            setLoading(false);
 
         } catch (error) {
@@ -35,26 +36,27 @@ const Products = () => {
                 </div>
             ) : (
                 productData.map(product => (
-                    <Link
-                        className="col text-decoration-none"
-                        key={product.id}
-                        to={{ pathname: `/${product.id}/product`, state: {product: product }}}
+                    <div className='col'
                         style={{ marginTop: '25px' }}
+                        key={product.id}
                     >
-                            <div className="card mx-auto text-center border-0 mt-3"
-                                style={{ width: '15rem', minHeight: '100%' }}>
-                                <img src={product.thumbnail} className="card-img-top mt-3"/>
-                                <div className="card-body d-flex flex-column">
-                                    <h5 className="card-title">{product.title}</h5>
-                                    <p className="card-text">{product.description.slice(0, 40)}</p>
-                                    <h5 className="card-title">$ {product.price}</h5>
-                                    <p
-                                        className="fw-light text-decoration-line-through">
-                                        $ {calculateOriginalPrice(product.price, product.discountPercentage)}
-                                    </p>
-                                </div>
+                        <Link
+                            className="card mx-auto text-center border-0 mt-3 text-decoration-none"
+                            to={{ pathname: `/${product.id}/product`, state: {product: product }}}
+                            style={{ width: '15rem', minHeight: '100%' }}
+                        >
+                            <img src={product.thumbnail} className="card-img-top mt-3"/>
+                            <div className="card-body d-flex flex-column">
+                                <h5 className="card-title">{product.title}</h5>
+                                <p className="card-text">{product.description.slice(0, 40)}</p>
+                                <h5 className="card-title">$ {product.price}</h5>
+                                <p
+                                    className="fw-light text-decoration-line-through">
+                                    $ {calculateOriginalPrice(product.price, product.discountPercentage)}
+                                </p>
                             </div>
-                    </Link>
+                        </Link>
+                    </div>
 
                 )))}
 

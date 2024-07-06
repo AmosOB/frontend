@@ -11,6 +11,7 @@ import Profile from './component/Auth/Profile';
 import Cart from './component/Cart';
 import { useCart } from './component/CartContext';
 import { Alert } from 'bootstrap';
+import { AuthProvider } from './component/AuthContext';
 
 function App() {
     const { showAlert, setShowAlert} = useCart();
@@ -24,20 +25,7 @@ function App() {
         <div
             className='container-fluid'
             style={{ backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-                {/* {[
-        'primary',
-        'secondary',
-        'success',
-        'danger',
-        'warning',
-        'info',
-        'light',
-        'dark',
-      ].map((variant) => (
-        <Alert key={variant} variant={variant}>
-          This is a {variant} alert—check it out!
-        </Alert>
-      ))} */}
+
             {showAlert && (
                 <div
                     className="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3"
@@ -54,18 +42,19 @@ function App() {
                     </button>
                 </div>
             )}
-
-            <Navbar logoutState= {logoutState} loggedIn= {loggedIn}/>
-                <Routes>
-                    <Route path='/' element = {<Products/>}/>
-                    <Route path='/login' element = {<Login loginState ={loginState} />}/>
-                    <Route path='/register' element = {<Register />}/>
-                    <Route path='/cart' element = {<Cart />}/>
-                    <Route path='/:id/product' element = {<Item/>}/>
-                    <Route element = {<PrivateRoutes />}>
-                        <Route path='/:username' element = {<Profile />}/>
-                    </Route>
-                </Routes>
+            <AuthProvider>
+                <Navbar logoutState= {logoutState} loggedIn= {loggedIn}/>
+                    <Routes>
+                        <Route path='/' element = {<Products/>}/>
+                        <Route path='/login' element = {<Login loginState ={loginState} />}/>
+                        <Route path='/register' element = {<Register />}/>
+                        <Route path='/cart' element = {<Cart />}/>
+                        <Route path='/:id/product' element = {<Item/>}/>
+                        <Route element = {<PrivateRoutes />}>
+                            <Route path='/:username' element = {<Profile />}/>
+                        </Route>
+                    </Routes>
+            </AuthProvider>
         </div>
   );
 }

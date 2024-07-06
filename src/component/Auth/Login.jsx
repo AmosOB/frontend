@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../Navbar';
+import { useAuth } from '../AuthContext';
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
 const Login = () => {
+    const { login, logout } = useAuth();
     const [error, setError] = useState({});
     const [formData, setFormData] = useState({
         email: '',
@@ -21,6 +23,7 @@ const Login = () => {
             const token = res.data.access_token;
             localStorage.setItem('token', token);
             console.log(res);
+            logout();
             navigate('/');
 
         })

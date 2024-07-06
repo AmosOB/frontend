@@ -11,7 +11,8 @@ const Register = () => {
         name: '',
         username: '',
         email: '',
-        password: ''
+        password: '',
+        password_confirmation: ''
     });
 
     const navigate = useNavigate();
@@ -118,6 +119,26 @@ const Register = () => {
                                         htmlFor="floatingInput"
                                     >
                                         Password
+                                    </label>
+                                    {error.password && (
+                                        <div className="text-danger">{error.password[0]}</div>
+                                     )}
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="password"
+                                        name="password_confirmation"
+                                        value={ formData.password_confirmation }
+                                        onChange={(e) => setFormData({...formData, password_confirmation: e.target.value})}
+                                        className={`form-control bg-white ${error.password ? 'is-invalid' : ''}`}
+                                        id="password_confirmation"
+                                        placeholder="password_confirmation"
+                                        autoComplete="password_confirmation"
+                                        />
+                                    <label
+                                        htmlFor="floatingInput"
+                                    >
+                                        Confirm Password
                                     </label>
                                     {error.password && (
                                         <div className="text-danger">{error.password[0]}</div>

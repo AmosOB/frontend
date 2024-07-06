@@ -11,10 +11,11 @@ import axios from 'axios';
 import { useCart } from './CartContext';
 import { Dropdown } from 'react-bootstrap';
 import SearchProducts from './SearchProducts';
+import { useAuth } from './AuthContext';
 
 
-const Navbar = ({ cartEmpty, setCartEmpty}) => {
-    const [loggedIn, setLoggedIn] = useState(true);
+const Navbar = ({ cartEmpty }) => {
+    const {loggedIn, logout,} = useAuth();
     const { cart } = useCart();
     const [user, setUser] = useState(null);
 
@@ -35,19 +36,14 @@ const Navbar = ({ cartEmpty, setCartEmpty}) => {
         axios.post(`/api/logout/`)
         .then((res) => {
             localStorage.removeItem('token');
-            setLoggedIn(false);
+            logout();
         })
         .catch((err) =>{
             console.log('Error fetching user data:', err);
         })
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            setLoggedIn(false);
-        }
-    }, []);
+
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
@@ -67,7 +63,7 @@ const Navbar = ({ cartEmpty, setCartEmpty}) => {
                 <div className=''>
                     <Link to={`/cart`}>
                         <IconButton aria-label="cart">
-                            <StyledBadge badgeContent={cart.length} color="primary">
+                            <StyledBadge badgeContent={ cartEmpty ? 0 : cart.length } color="primary">
                                 <ShoppingCartIcon />
                             </StyledBadge>
                         </IconButton>

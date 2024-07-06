@@ -75,7 +75,9 @@ const Item = () => {
                                             <p className="fw-lighter badge bg-primary text-wrap">In Stock - {product.stock}</p>
                                             <p className="fw-lighter fs-6">{product.shippingInformation}</p>
                                             <p className="fw-bold fs-6">{product.returnPolicy}</p>
+                                            <p className="fw-bold fs-6">{product.meta.barcode}</p>
                                         </div>
+                                            <img src={product.meta.qrCode} className="d-block w-100"/>
                                     </div>
                                         <div className="my-3">
                                             <button
